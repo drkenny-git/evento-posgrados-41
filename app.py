@@ -124,6 +124,12 @@ def guardar_email():
     return jsonify({'error': 'Email no proporcionado'}), 400
 
 
+@app.route('/directores')
+def links_directores():
+    """Página para que TODOS los directores vean y copien sus links"""
+    return render_template('links_directores.html', programas=PROGRAMAS)
+
+
 @app.route('/admin/descargar')
 def descargar_registros():
     """Descarga el archivo Excel con todos los registros"""
