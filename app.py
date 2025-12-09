@@ -106,7 +106,10 @@ def registro_director(director_id):
     # Registrar la visita automáticamente (sin email)
     registrar_asistencia(programa)
 
-    return render_template('registro.html', programa=programa, director_id=director_id)
+    return render_template('registro.html',
+                           programa=programa,
+                           director_id=director_id,
+                           dominio=DOMINIO_UNIVERSIDAD)
 
 
 @app.route('/api/guardar_email', methods=['POST'])
