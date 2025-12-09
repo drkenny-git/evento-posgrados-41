@@ -158,24 +158,65 @@
 
         .input-group {
             display: flex;
-            gap: 12px;
+            gap: 8px;
             align-items: stretch;
+            margin-bottom: 15px;
         }
 
-        input[type="email"] {
+        .email-input-container {
+            display: flex;
             flex: 1;
-            padding: 14px 18px;
+            gap: 0;
+            align-items: center;
             border: 2px solid #e0ddd7;
             border-radius: 8px;
-            font-size: 16px;
-            font-family: 'Work Sans', sans-serif;
+            padding: 0;
             transition: all 0.3s ease;
+            background: white;
         }
 
-        input[type="email"]:focus {
-            outline: none;
+        .email-input-container:focus-within {
             border-color: var(--color-accent);
             box-shadow: 0 0 0 3px rgba(232, 146, 76, 0.1);
+        }
+
+        input[type="text"], 
+        input[type="email"] {
+            border: none;
+            padding: 14px 12px;
+            font-size: 16px;
+            font-family: 'Work Sans', sans-serif;
+            background: transparent;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus {
+            outline: none;
+        }
+
+        #emailUser {
+            flex: 0 1 auto;
+            min-width: 120px;
+        }
+
+        .email-separator {
+            color: #999;
+            font-size: 18px;
+            padding: 0 4px;
+            user-select: none;
+        }
+
+        #emailDomain {
+            flex: 1;
+            min-width: 150px;
+            color: #666;
+        }
+
+        .domain-note {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 15px;
+            font-style: italic;
         }
 
         button {
@@ -288,15 +329,24 @@
                 <h3>¿Quisieras registrar tu asistencia con tu correo electrónico?</h3>
                 <p>Es opcional, pero nos ayuda a mantenerte informado sobre el programa</p>
                 
-                <div class="input-group">
+                <div class="email-input-container">
                     <input 
-                        type="email" 
-                        id="emailInput" 
-                        placeholder="tu.correo@ejemplo.com"
-                        autocomplete="email"
+                        type="text" 
+                        id="emailUser" 
+                        placeholder="tu.nombre"
+                        autocomplete="off"
                     >
-                    <button onclick="guardarEmail()">Registrar</button>
+                    <span class="email-separator">@</span>
+                    <input 
+                        type="text" 
+                        id="emailDomain" 
+                        value="{{ dominio }}"
+                        autocomplete="off"
+                    >
                 </div>
+                <p class="domain-note">💡 Puedes editar el dominio si no eres estudiante de la universidad</p>
+                
+                <button onclick="guardarEmail()" style="width: 100%;">Registrar Email</button>
 
                 <div id="mensaje"></div>
             </div>
@@ -309,18 +359,33 @@
 
     <script>
         async function guardarEmail() {
-            const emailInput = document.getElementById('emailInput');
+            const emailUser = document.getElementById('emailUser');
+            const emailDomain = document.getElementById('emailDomain');
             const mensaje = document.getElementById('mensaje');
-            const email = emailInput.value.trim();
             const button = event.target;
 
-            // Validar email
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!email) {
-                mensaje.innerHTML = '<div class="message error">Por favor ingresa tu correo electrónico</div>';
+            // Obtener valores y limpiar espacios
+            const user = emailUser.value.trim();
+            const domain = emailDomain.value.trim();
+
+            // Validar que ambos campos tengan contenido
+            if (!user) {
+                mensaje.innerHTML = '<div class="message error">Por favor ingresa tu nombre de usuario</div>';
+                emailUser.focus();
                 return;
             }
 
+            if (!domain) {
+                mensaje.innerHTML = '<div class="message error">Por favor ingresa el dominio del correo</div>';
+                emailDomain.focus();
+                return;
+            }
+
+            // Construir el email completo
+            const email = user + '@' + domain;
+
+            // Validar formato del email completo
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
                 mensaje.innerHTML = '<div class="message error">Por favor ingresa un correo electrónico válido</div>';
                 return;
@@ -345,27 +410,39 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    mensaje.innerHTML = '<div class="message success">✓ Email registrado exitosamente</div>';
-                    emailInput.value = '';
-                    emailInput.disabled = true;
+                    mensaje.innerHTML = '<div class="message success">✓ Email registrado exitosamente: ' + email + '</div>';
+                    emailUser.value = '';
+                    emailUser.disabled = true;
+                    emailDomain.disabled = true;
                     button.textContent = '✓ Registrado';
                 } else {
                     mensaje.innerHTML = '<div class="message error">Error al registrar el email. Por favor intenta de nuevo.</div>';
                     button.disabled = false;
-                    button.textContent = 'Registrar';
+                    button.textContent = 'Registrar Email';
                 }
             } catch (error) {
                 mensaje.innerHTML = '<div class="message error">Error de conexión. Por favor intenta de nuevo.</div>';
                 button.disabled = false;
-                button.textContent = 'Registrar';
+                button.textContent = 'Registrar Email';
             }
         }
 
-        // Permitir enviar con Enter
-        document.getElementById('emailInput').addEventListener('keypress', function(event) {
+        // Permitir enviar con Enter en cualquiera de los campos
+        document.getElementById('emailUser').addEventListener('keypress', function(event) {
             if (event.key === 'Enter') {
                 guardarEmail();
             }
+        });
+
+        document.getElementById('emailDomain').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                guardarEmail();
+            }
+        });
+
+        // Focus automático en el campo de usuario al cargar
+        window.addEventListener('load', function() {
+            document.getElementById('emailUser').focus();
         });
     </script>
 </body>
