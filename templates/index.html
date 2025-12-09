@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Links de Registro - Evento de Posgrados</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-primary: #1a3a52;
+            --color-secondary: #2d5f7f;
+            --color-accent: #e8924c;
+        }
+
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background: linear-gradient(135deg, #fefdfb 0%, #f5f1ea 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #2c2c2c;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        h1 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 42px;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .admin-links {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .admin-button {
+            padding: 12px 24px;
+            background: var(--color-accent);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .admin-button:hover {
+            background: #d67d35;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(232, 146, 76, 0.3);
+        }
+
+        .admin-button.secondary {
+            background: var(--color-secondary);
+        }
+
+        .admin-button.secondary:hover {
+            background: #245269;
+        }
+
+        .programs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .program-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        .program-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .program-name {
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .link-container {
+            background: #f9f8f6;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #666;
+            word-break: break-all;
+            margin-bottom: 15px;
+            border: 1px solid #e8e5df;
+        }
+
+        .copy-button {
+            width: 100%;
+            padding: 10px;
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Work Sans', sans-serif;
+        }
+
+        .copy-button:hover {
+            background: #0f2536;
+        }
+
+        .copy-button.copied {
+            background: #4a7c59;
+        }
+
+        .instructions {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+        }
+
+        .instructions h2 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 24px;
+            color: var(--color-primary);
+            margin-bottom: 15px;
+        }
+
+        .instructions ol {
+            margin-left: 20px;
+            line-height: 1.8;
+            color: #666;
+        }
+
+        .instructions li {
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 32px;
+            }
+
+            .programs-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-links {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .admin-button {
+                width: 100%;
+                max-width: 300px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Evento de Posgrados</h1>
+            <p class="subtitle">Links de registro por programa</p>
+            
+            <div class="admin-links">
+                <a href="/admin/estadisticas" class="admin-button">Ver Estadísticas</a>
+                <a href="/admin/descargar" class="admin-button secondary">Descargar Excel</a>
+            </div>
+        </header>
+
+        <div class="instructions">
+            <h2>Instrucciones para Directores</h2>
+            <ol>
+                <li>Cada director tiene un link único para su programa</li>
+                <li>Comparte este link con los estudiantes durante tu sesión de Zoom</li>
+                <li>Cuando un estudiante accede al link, su asistencia se registra automáticamente</li>
+                <li>El estudiante puede opcionalmente dejar su email para seguimiento</li>
+                <li>Todos los registros se guardan en el archivo Excel que puedes descargar arriba</li>
+            </ol>
+        </div>
+
+        <div class="programs-grid">
+            {% for director_id, programa in programas.items() %}
+            <div class="program-card">
+                <div class="program-name">{{ programa }}</div>
+                <div class="link-container" id="link-{{ director_id }}">
+                    {{ request.url_root }}{{ director_id }}
+                </div>
+                <button class="copy-button" onclick="copiarLink('{{ director_id }}')">
+                    Copiar Link
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        function copiarLink(directorId) {
+            const linkElement = document.getElementById('link-' + directorId);
+            const link = linkElement.textContent.trim();
+            const button = event.target;
+            
+            navigator.clipboard.writeText(link).then(() => {
+                const originalText = button.textContent;
+                button.textContent = '✓ Copiado!';
+                button.classList.add('copied');
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                alert('Error al copiar: ' + err);
+            });
+        }
+    </script>
+</body>
+</html>

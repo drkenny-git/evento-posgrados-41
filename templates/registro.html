@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asistencia Registrada - {{ programa }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-primary: #1a3a52;
+            --color-secondary: #2d5f7f;
+            --color-accent: #e8924c;
+            --color-success: #4a7c59;
+            --color-bg: #fefdfb;
+            --color-text: #2c2c2c;
+            --color-text-light: #666;
+        }
+
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background: linear-gradient(135deg, #fefdfb 0%, #f5f1ea 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-text);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            padding: 50px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+        }
+
+        .check-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--color-success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            animation: scaleIn 0.5s ease-out 0.2s backwards;
+            box-shadow: 0 10px 30px rgba(74, 124, 89, 0.3);
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .check-icon::after {
+            content: '✓';
+            font-size: 48px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .header h1 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 18px;
+            font-weight: 300;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .programa-name {
+            font-family: 'Crimson Pro', serif;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 30px;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .email-section {
+            background: #f9f8f6;
+            border: 2px dashed #d4cfc4;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        .email-section h3 {
+            font-family: 'Work Sans', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 8px;
+        }
+
+        .email-section p {
+            color: var(--color-text-light);
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 12px;
+            align-items: stretch;
+        }
+
+        input[type="email"] {
+            flex: 1;
+            padding: 14px 18px;
+            border: 2px solid #e0ddd7;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: 'Work Sans', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        input[type="email"]:focus {
+            outline: none;
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 3px rgba(232, 146, 76, 0.1);
+        }
+
+        button {
+            padding: 14px 28px;
+            background: var(--color-accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Work Sans', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        button:hover {
+            background: #d67d35;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(232, 146, 76, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            padding: 14px 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            text-align: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .message.success {
+            background: #e8f5e9;
+            color: var(--color-success);
+            border: 1px solid #a5d6a7;
+        }
+
+        .message.error {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #ef9a9a;
+        }
+
+        .footer-note {
+            text-align: center;
+            color: var(--color-text-light);
+            font-size: 13px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e8e5df;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 10px;
+            }
+
+            .header {
+                padding: 40px 30px;
+            }
+
+            .header h1 {
+                font-size: 26px;
+            }
+
+            .content {
+                padding: 30px 25px;
+            }
+
+            .input-group {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="check-icon"></div>
+            <h1>Asistencia Registrada</h1>
+            <p>Tu participación ha sido confirmada</p>
+        </div>
+        
+        <div class="content">
+            <div class="programa-name">
+                {{ programa }}
+            </div>
+
+            <div class="email-section">
+                <h3>¿Quisieras registrar tu asistencia con tu correo electrónico?</h3>
+                <p>Es opcional, pero nos ayuda a mantenerte informado sobre el programa</p>
+                
+                <div class="input-group">
+                    <input 
+                        type="email" 
+                        id="emailInput" 
+                        placeholder="tu.correo@ejemplo.com"
+                        autocomplete="email"
+                    >
+                    <button onclick="guardarEmail()">Registrar</button>
+                </div>
+
+                <div id="mensaje"></div>
+            </div>
+
+            <div class="footer-note">
+                Gracias por tu interés en nuestros programas de posgrado
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function guardarEmail() {
+            const emailInput = document.getElementById('emailInput');
+            const mensaje = document.getElementById('mensaje');
+            const email = emailInput.value.trim();
+            const button = event.target;
+
+            // Validar email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!email) {
+                mensaje.innerHTML = '<div class="message error">Por favor ingresa tu correo electrónico</div>';
+                return;
+            }
+
+            if (!emailRegex.test(email)) {
+                mensaje.innerHTML = '<div class="message error">Por favor ingresa un correo electrónico válido</div>';
+                return;
+            }
+
+            // Deshabilitar botón durante el envío
+            button.disabled = true;
+            button.textContent = 'Guardando...';
+
+            try {
+                const response = await fetch('/api/guardar_email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        director_id: '{{ director_id }}',
+                        email: email
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    mensaje.innerHTML = '<div class="message success">✓ Email registrado exitosamente</div>';
+                    emailInput.value = '';
+                    emailInput.disabled = true;
+                    button.textContent = '✓ Registrado';
+                } else {
+                    mensaje.innerHTML = '<div class="message error">Error al registrar el email. Por favor intenta de nuevo.</div>';
+                    button.disabled = false;
+                    button.textContent = 'Registrar';
+                }
+            } catch (error) {
+                mensaje.innerHTML = '<div class="message error">Error de conexión. Por favor intenta de nuevo.</div>';
+                button.disabled = false;
+                button.textContent = 'Registrar';
+            }
+        }
+
+        // Permitir enviar con Enter
+        document.getElementById('emailInput').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                guardarEmail();
+            }
+        });
+    </script>
+</body>
+</html>
