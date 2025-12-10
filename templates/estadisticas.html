@@ -178,7 +178,12 @@
     <div class="container">
         <header>
             <h1>Estadísticas de Asistencia</h1>
-            <a href="/" class="back-button">← Volver al inicio</a>
+            <div style="display: flex; gap: 10px; justify-content: center; align-items: center;">
+                <a href="/" class="back-button">← Volver al inicio</a>
+                {% if mostrar_logout %}
+                <a href="/admin/logout" class="back-button" style="background: #c62828;">🔒 Cerrar Sesión</a>
+                {% endif %}
+            </div>
         </header>
 
         {% if stats %}

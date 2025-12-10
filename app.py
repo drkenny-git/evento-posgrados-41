@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, send_file
+from flask import Flask, render_template, request, jsonify, send_file, session, redirect, url_for
 import pandas as pd
 from datetime import datetime
 import os
@@ -6,11 +6,18 @@ from pathlib import Path
 
 app = Flask(__name__)
 
+# Clave secreta para sesiones
+app.secret_key = os.environ.get('SECRET_KEY', 'clave-secreta-por-defecto-12345')
+
 # Archivo Excel para guardar los registros
 EXCEL_FILE = 'registros_asistencia.xlsx'
 
 # Dominio de correo de la universidad
 DOMINIO_UNIVERSIDAD = 'est.ups.edu.ec'
+
+# CONFIGURACIÓN DE SEGURIDAD PARA ADMIN
+ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'admin2025')
+
 
 # Lista de programas de maestría
 PROGRAMAS = {
@@ -67,6 +74,15 @@ def inicializar_excel():
         df = pd.DataFrame(columns=['Programa', 'Registro', 'Email'])
         df.to_excel(EXCEL_FILE, index=False)
 
+def requiere_autenticacion(f):
+    """Decorador para proteger rutas de admin - requiere login con contraseña"""
+    def wrapper(*args, **kwargs):
+        if session.get('admin_autenticado', False):
+            return f(*args, **kwargs)
+        else:
+            return redirect(url_for('admin_login'))
+    wrapper.__name__ = f.__name__
+    return wrapper
 
 def registrar_asistencia(programa, email=None):
     """Registra la asistencia en el archivo Excel"""
@@ -136,7 +152,28 @@ def links_directores():
     return render_template('links_directores.html', programas=PROGRAMAS)
 
 
+@app.route('/admin/login', methods=['GET', 'POST'])
+def admin_login():
+    """Página de login para administradores"""
+    if request.method == 'POST':
+        password = request.form.get('password', '')
+        if password == ADMIN_PASSWORD:
+            session['admin_autenticado'] = True
+            return redirect(url_for('estadisticas'))
+        else:
+            return render_template('admin_login.html', error='Contraseña incorrecta')
+    return render_template('admin_login.html', error=None)
+
+
+@app.route('/admin/logout')
+def admin_logout():
+    """Cerrar sesión de administrador"""
+    session.pop('admin_autenticado', None)
+    return redirect(url_for('index'))
+
+
 @app.route('/admin/descargar')
+@requiere_autenticacion
 def descargar_registros():
     """Descarga el archivo Excel con todos los registros"""
     if os.path.exists(EXCEL_FILE):
@@ -146,6 +183,7 @@ def descargar_registros():
 
 
 @app.route('/admin/estadisticas')
+@requiere_autenticacion
 def estadisticas():
     """Muestra estadísticas de asistencia"""
     if not os.path.exists(EXCEL_FILE):
@@ -161,7 +199,7 @@ def estadisticas():
         'por_programa': df['Programa'].value_counts().to_dict()
     }
 
-    return render_template('estadisticas.html', stats=stats)
+    return render_template('estadisticas.html', stats=stats, mostrar_logout=True)
 
 
 if __name__ == '__main__':
